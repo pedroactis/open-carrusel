@@ -13,11 +13,14 @@ interface ChatInputProps {
 }
 
 const SUGGESTIONS = [
-  "Create a 5-slide carousel about...",
-  "Make the design more minimal",
-  "Change the accent color to blue",
-  "Add a call-to-action slide",
-  "Make the headings bigger",
+  "Crie um carrossel de caso sobre a empresa...",
+  "Crie um post de opinião em foto única sobre...",
+  "Use esta referência só como estrutura, com um caso novo: ...",
+  "Crie um carrossel de 5 slides sobre...",
+  "Deixe o design mais minimalista",
+  "Mude a cor de destaque para azul",
+  "Adicione um slide com chamada para ação",
+  "Aumente o tamanho dos títulos",
 ];
 
 export function ChatInput({ onSend, isStreaming, disabled, textareaRef: externalRef, onStop }: ChatInputProps) {
@@ -73,19 +76,19 @@ export function ChatInput({ onSend, isStreaming, disabled, textareaRef: external
           onKeyDown={handleKeyDown}
           onInput={handleInput}
           placeholder={
-            isStreaming ? "AI is working..." : "Describe your carousel..."
+            isStreaming ? "A IA está trabalhando..." : "Descreva seu carrossel..."
           }
           disabled={isStreaming || disabled}
           rows={1}
           className="flex-1 resize-none bg-muted rounded-lg px-3 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
-          aria-label="Chat message input"
+          aria-label="Mensagem para o assistente"
         />
         {isStreaming ? (
           <Button
             size="icon"
             variant="destructive"
             onClick={onStop}
-            aria-label="Stop generating"
+            aria-label="Parar geração"
           >
             <Square className="h-3.5 w-3.5" />
           </Button>
@@ -94,7 +97,7 @@ export function ChatInput({ onSend, isStreaming, disabled, textareaRef: external
             size="icon"
             onClick={handleSubmit}
             disabled={!value.trim() || disabled}
-            aria-label="Send message"
+            aria-label="Enviar mensagem"
           >
             <Send className="h-4 w-4" />
           </Button>

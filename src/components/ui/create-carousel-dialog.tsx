@@ -42,13 +42,13 @@ export function CreateCarouselDialog({
                 <Layers className="h-4 w-4 text-accent" />
               </div>
               <Dialog.Title className="text-base font-semibold">
-                New Carousel
+                Novo carrossel
               </Dialog.Title>
             </div>
             <Dialog.Close asChild>
               <button
                 className="h-7 w-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted"
-                aria-label="Close"
+                aria-label="Fechar"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -58,12 +58,12 @@ export function CreateCarouselDialog({
           <div className="space-y-4">
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-                Carousel Name
+                Nome do carrossel
               </label>
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., 5 Tips for Remote Work"
+                placeholder="ex.: 5 dicas para trabalhar de casa"
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleCreate();
@@ -73,7 +73,7 @@ export function CreateCarouselDialog({
 
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-                Aspect Ratio
+                Proporção
               </label>
               <AspectRatioSelector
                 value={aspectRatio}
@@ -85,7 +85,7 @@ export function CreateCarouselDialog({
           <div className="flex justify-end gap-2 mt-6">
             <Dialog.Close asChild>
               <Button variant="outline" size="sm">
-                Cancel
+                Cancelar
               </Button>
             </Dialog.Close>
             <Button
@@ -94,7 +94,7 @@ export function CreateCarouselDialog({
               onClick={handleCreate}
               disabled={!name.trim()}
             >
-              Create
+              Criar
             </Button>
           </div>
         </Dialog.Content>

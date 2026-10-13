@@ -108,12 +108,12 @@ export function ExportButton({ carouselId, slideCount }: ExportButtonProps) {
         ) : done ? (
           <>
             <Check className="h-4 w-4" />
-            <span>Downloaded!</span>
+            <span>Baixado!</span>
           </>
         ) : (
           <>
             <Download className="h-4 w-4" />
-            <span>Export PNG</span>
+            <span>Exportar PNG</span>
           </>
         )}
       </span>

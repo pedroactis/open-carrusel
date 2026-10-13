@@ -15,11 +15,11 @@ export async function POST(
   const carousel = await getCarousel(id);
 
   if (!carousel) {
-    return NextResponse.json({ error: "Carousel not found" }, { status: 404 });
+    return NextResponse.json({ error: "Carrossel não encontrado" }, { status: 404 });
   }
 
   if (carousel.slides.length === 0) {
-    return NextResponse.json({ error: "No slides to export" }, { status: 400 });
+    return NextResponse.json({ error: "Nenhum slide para exportar" }, { status: 400 });
   }
 
   try {
@@ -65,9 +65,9 @@ export async function POST(
     });
   } catch (error) {
     console.error("Export error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : "erro desconhecido";
     return NextResponse.json(
-      { error: `Export failed: ${message}` },
+      { error: `Falha ao exportar: ${message}` },
       { status: 500 }
     );
   }

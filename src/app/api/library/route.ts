@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     const form = await request.formData();
     const files = form.getAll("file").filter((f): f is File => f instanceof File);
     if (files.length === 0) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+      return NextResponse.json({ error: "Nenhum arquivo enviado" }, { status: 400 });
     }
     const category = String(form.get("category") ?? "geral").trim().toLowerCase() || "geral";
     const tags = parseTags(form.get("tags") ?? "");
@@ -68,6 +68,6 @@ export async function POST(request: Request) {
     const created = await addImages(items);
     return NextResponse.json({ created, errors }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: "Failed to process upload" }, { status: 500 });
+    return NextResponse.json({ error: "Não foi possível processar o envio" }, { status: 500 });
   }
 }

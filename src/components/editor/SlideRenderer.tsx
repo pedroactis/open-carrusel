@@ -10,6 +10,8 @@ interface SlideRendererProps {
   aspectRatio: AspectRatio;
   className?: string;
   style?: React.CSSProperties;
+  /** Drawn inside the scaled slide box (e.g. the safe-zone overlay), so it lines up with the slide. */
+  children?: React.ReactNode;
 }
 
 export function SlideRenderer({
@@ -17,6 +19,7 @@ export function SlideRenderer({
   aspectRatio,
   className,
   style,
+  children,
 }: SlideRendererProps) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
@@ -80,7 +83,7 @@ export function SlideRenderer({
           <iframe
             sandbox=""
             srcDoc={srcDoc}
-            title="Slide preview"
+            title="Prévia do slide"
             style={{
               width: slideW,
               height: slideH,
@@ -93,6 +96,7 @@ export function SlideRenderer({
               pointerEvents: "none",
             }}
           />
+          {children}
         </div>
       )}
     </div>

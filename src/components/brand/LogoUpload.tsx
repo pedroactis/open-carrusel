@@ -53,7 +53,7 @@ export function LogoUpload({ value, onChange }: LogoUploadProps) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={value}
-              alt="Brand logo"
+              alt="Logo da marca"
               className="max-h-full max-w-full object-contain"
             />
           </div>
@@ -63,7 +63,7 @@ export function LogoUpload({ value, onChange }: LogoUploadProps) {
             onClick={() => onChange(null)}
           >
             <X className="h-3 w-3 mr-1" />
-            Remove
+            Remover
           </Button>
         </div>
       ) : (
@@ -86,7 +86,7 @@ export function LogoUpload({ value, onChange }: LogoUploadProps) {
             <div className="flex flex-col items-center gap-2">
               <div className="h-5 w-5 border-2 border-accent border-t-transparent rounded-full animate-spin" />
               <span className="text-xs text-muted-foreground">
-                Uploading...
+                Enviando...
               </span>
             </div>
           ) : (
@@ -96,10 +96,10 @@ export function LogoUpload({ value, onChange }: LogoUploadProps) {
               </div>
               <div>
                 <span className="text-xs font-medium">
-                  Drop your logo here
+                  Arraste sua logo para cá
                 </span>
                 <span className="text-xs text-muted-foreground block">
-                  PNG, JPG, or WebP (max 10MB)
+                  PNG, JPG ou WebP (até 10 MB)
                 </span>
               </div>
             </div>

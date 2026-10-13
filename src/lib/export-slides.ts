@@ -147,3 +147,31 @@ export async function exportAllSlides(
 
   return results;
 }
+
+/**
+ * Render the keyword material (A4 pages, one per <section>) to a PDF.
+ * Same browser, fonts and image inlining as the slide export.
+ */
+export async function exportMaterialPdf(html: string): Promise<Buffer> {
+  const inlinedFontCss = await getInlinedFontCSS(extractFontFamilies(html));
+  const inlinedHtml = await inlineImages(html);
+  const fullHtml = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><style>${inlinedFontCss}
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+section { width: 210mm; height: 297mm; overflow: hidden; break-after: page; position: relative; }
+section:last-of-type { break-after: auto; }
+</style></head><body>${inlinedHtml}</body></html>`;
+
+  const br = await getBrowser();
+  const page = await br.newPage();
+  try {
+    await page.setContent(fullHtml, { waitUntil: "domcontentloaded", timeout: 15000 });
+    await page.evaluate(() => document.fonts.ready).catch(() => {});
+    const pdf = await page.pdf({ format: "A4", printBackground: true, preferCSSPageSize: true });
+    exportCount++;
+    return Buffer.from(pdf);
+  } finally {
+    await page.close().catch(() => {});
+  }
+}

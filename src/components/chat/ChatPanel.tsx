@@ -20,6 +20,8 @@ interface ChatPanelProps {
   onStreamStart?: () => void;
   onStreamEnd?: () => void;
   chatInputRef?: React.RefObject<HTMLTextAreaElement | null>;
+  /** Lets the editor toolbar send a message (e.g. the Revisar button). */
+  sendMessageRef?: React.RefObject<((message: string) => void) | null>;
 }
 
 export function ChatPanel({
@@ -29,6 +31,7 @@ export function ChatPanel({
   onStreamStart,
   onStreamEnd,
   chatInputRef,
+  sendMessageRef,
 }: ChatPanelProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -118,12 +121,12 @@ export function ChatPanel({
         if (!response.ok) {
           const err = await response.json().catch(() => ({}));
           throw new Error(
-            (err as { error?: string }).error || "Failed to connect to AI"
+            (err as { error?: string }).error || "Não foi possível conectar à IA"
           );
         }
 
         const reader = response.body?.getReader();
-        if (!reader) throw new Error("No response stream");
+        if (!reader) throw new Error("O assistente não respondeu");
 
         const decoder = new TextDecoder();
         let accumulated = "";
@@ -206,7 +209,7 @@ export function ChatPanel({
         }
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return;
-        const message = err instanceof Error ? err.message : "An unexpected error occurred";
+        const message = err instanceof Error ? err.message : "Ocorreu um erro inesperado";
         setError(message);
         // Remove empty assistant message on error
         setMessages((prev) =>
@@ -228,20 +231,28 @@ export function ChatPanel({
     [isStreaming, sessionId, carouselId, onStreamStart, onStreamEnd, persistMessages]
   );
 
+  useEffect(() => {
+    if (!sendMessageRef) return;
+    sendMessageRef.current = handleSend;
+    return () => {
+      sendMessageRef.current = null;
+    };
+  }, [sendMessageRef, handleSend]);
+
   if (!claudeAvailable) {
     return (
       <div className="h-full flex flex-col items-center justify-center p-6 text-center">
         <Plug className="h-10 w-10 text-muted-foreground mb-3" />
-        <h3 className="font-semibold text-sm mb-1">Connect Claude CLI</h3>
+        <h3 className="font-semibold text-sm mb-1">Conecte o Claude CLI</h3>
         <p className="text-xs text-muted-foreground max-w-[200px]">
-          Install Claude CLI to enable AI-powered carousel creation.{" "}
+          Instale o Claude CLI para criar carrosséis com IA.{" "}
           <a
             href="https://docs.anthropic.com/en/docs/claude-code"
             target="_blank"
             rel="noopener noreferrer"
             className="text-accent underline"
           >
-            Install guide
+            Guia de instalação
           </a>
         </p>
       </div>
@@ -252,9 +263,9 @@ export function ChatPanel({
     <div className="h-full flex flex-col">
       <div className="px-4 py-3 border-b border-border flex items-start justify-between">
         <div>
-          <h2 className="text-sm font-semibold">AI Assistant</h2>
+          <h2 className="text-sm font-semibold">Assistente</h2>
           <p className="text-xs text-muted-foreground">
-            Describe the carousel you want to create
+            Descreva o carrossel que você quer criar
           </p>
         </div>
         {messages.length > 0 && (
@@ -262,7 +273,7 @@ export function ChatPanel({
             onClick={handleClearChat}
             className="text-[10px] text-muted-foreground hover:text-destructive transition-colors px-1.5 py-0.5 rounded"
           >
-            Clear
+            Limpar
           </button>
         )}
       </div>
@@ -276,9 +287,9 @@ export function ChatPanel({
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         {messages.length === 0 && (
           <div className="p-6 text-center text-muted-foreground">
-            <p className="text-sm mb-1">No messages yet</p>
+            <p className="text-sm mb-1">Nenhuma mensagem ainda</p>
             <p className="text-xs">
-              Tell me what carousel you&apos;d like to create
+              Diga qual carrossel você quer criar
             </p>
           </div>
         )}

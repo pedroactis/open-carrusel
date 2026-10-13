@@ -89,7 +89,7 @@ export function ReferenceImages({
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2">
         <span className="text-xs font-medium text-muted-foreground">
-          Reference Images
+          Imagens de referência
         </span>
         <Button
           variant="ghost"
@@ -99,7 +99,7 @@ export function ReferenceImages({
           className="h-6 text-xs gap-1 px-2"
         >
           <ImagePlus className="h-3 w-3" />
-          {uploading ? "Uploading..." : "Add"}
+          {uploading ? "Enviando..." : "Adicionar"}
         </Button>
       </div>
 
@@ -113,10 +113,10 @@ export function ReferenceImages({
         >
           <ImagePlus className="h-4 w-4 mx-auto text-muted-foreground/50 mb-1" />
           <p className="text-[10px] text-muted-foreground">
-            Drop reference images here
+            Solte imagens de referência aqui
           </p>
           <p className="text-[9px] text-muted-foreground/70">
-            The AI will study these to match your style
+            A IA estuda essas imagens para seguir o seu estilo
           </p>
         </div>
       ) : (
@@ -138,7 +138,7 @@ export function ReferenceImages({
               <button
                 onClick={() => handleRemove(img.id)}
                 className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-destructive text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                aria-label={`Remove ${img.name}`}
+                aria-label={`Remover ${img.name}`}
               >
                 <X className="h-2.5 w-2.5" />
               </button>
@@ -164,7 +164,7 @@ export function ReferenceImages({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={previewUrl}
-              alt="Reference preview"
+              alt="Prévia da referência"
               className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
             />
             <button

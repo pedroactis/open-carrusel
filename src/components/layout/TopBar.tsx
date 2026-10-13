@@ -47,7 +47,7 @@ export function TopBar({
     <header className="h-14 border-b border-border bg-surface flex items-center px-4 gap-3 shrink-0">
       {showBack && (
         <Link href="/">
-          <Button variant="ghost" size="icon" aria-label="Back to dashboard">
+          <Button variant="ghost" size="icon" aria-label="Voltar ao início">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
@@ -73,7 +73,7 @@ export function TopBar({
           <span
             className={`font-semibold text-sm truncate ${editable ? "cursor-pointer hover:text-accent transition-colors" : ""}`}
             onClick={() => editable && startEditing()}
-            title={editable ? "Click to rename" : undefined}
+            title={editable ? "Clique para renomear" : undefined}
           >
             {title || "Open Carrusel"}
           </span>
@@ -90,7 +90,7 @@ export function TopBar({
           variant="ghost"
           size="icon"
           onClick={onSettingsClick}
-          aria-label="Settings"
+          aria-label="Configurações"
         >
           <Settings className="h-4 w-4" />
         </Button>

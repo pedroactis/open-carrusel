@@ -17,7 +17,7 @@ export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          aria-label={`${label} color`}
+          aria-label={`Escolher cor: ${label}`}
         />
         <div
           className="h-9 w-9 rounded-lg border border-border shadow-sm cursor-pointer"

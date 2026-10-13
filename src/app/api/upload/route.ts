@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       formData = await request.formData();
     } catch {
       return NextResponse.json(
-        { error: "Request must be multipart/form-data with a 'file' field" },
+        { error: "A requisição precisa ser multipart/form-data com um campo 'file'" },
         { status: 400 }
       );
     }
@@ -57,14 +57,14 @@ export async function POST(request: Request) {
 
     if (!file || !(file instanceof File)) {
       return NextResponse.json(
-        { error: "No file provided" },
+        { error: "Nenhum arquivo enviado" },
         { status: 400 }
       );
     }
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: "File too large (max 10MB)" },
+        { error: "Arquivo grande demais (máximo de 10 MB)" },
         { status: 400 }
       );
     }
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
     const ext = path.extname(file.name).toLowerCase();
     if (ext === ".svg" || file.type === "image/svg+xml") {
       return NextResponse.json(
-        { error: "SVG files are not allowed" },
+        { error: "Arquivos SVG não são permitidos" },
         { status: 400 }
       );
     }
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
     const fileType = detectType(buffer);
     if (!fileType) {
       return NextResponse.json(
-        { error: "Unsupported file type. Allowed: PNG, JPG, WebP, WOFF2, TTF" },
+        { error: "Tipo de arquivo não suportado. Permitidos: PNG, JPG, WebP, WOFF2, TTF" },
         { status: 400 }
       );
     }
@@ -125,7 +125,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(
-      { error: "Failed to process upload" },
+      { error: "Não foi possível processar o envio" },
       { status: 500 }
     );
   }

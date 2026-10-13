@@ -57,9 +57,9 @@ export function TemplateGallery() {
     return (
       <div className="text-center py-12">
         <Bookmark className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
-        <p className="text-sm text-muted-foreground">No templates saved yet</p>
+        <p className="text-sm text-muted-foreground">Nenhum modelo salvo ainda</p>
         <p className="text-xs text-muted-foreground mt-1">
-          Save a carousel as a template to reuse it later
+          Salve um carrossel como modelo para usar de novo depois
         </p>
       </div>
     );

@@ -16,6 +16,25 @@ export interface ReferenceImage {
   addedAt: string;
 }
 
+/** Material que a palavra-chave entrega no Direct (PDF do caso). */
+export interface CarouselMaterial {
+  keyword: string;   // palavra que a pessoa comenta, ex.: "SIX"
+  title: string;     // nome do PDF
+  html: string;      // páginas A4: cada <section> vira uma página
+  dmText: string;    // mensagem do Direct, com [LINK DO PDF] no lugar do link
+}
+
+/** Números do post publicado, digitados pelo usuário. */
+export interface CarouselResult {
+  url: string;
+  likes: number;
+  comments: number;
+  saves?: number;
+  shares?: number;
+  follows?: number;
+  recordedAt: string;
+}
+
 export interface Carousel {
   id: string;
   name: string;
@@ -24,6 +43,8 @@ export interface Carousel {
   referenceImages: ReferenceImage[];
   caption?: string;
   hashtags?: string[];
+  material?: CarouselMaterial;
+  result?: CarouselResult;
   chatSessionId: string | null;
   isTemplate: boolean;
   tags: string[];
@@ -42,4 +63,8 @@ export const DIMENSIONS: Record<AspectRatio, { width: number; height: number }> 
 };
 
 export const MAX_SLIDES = 20;
+/** Teto da publicação pela API da Meta (o app aceita 20). */
+export const MAX_SLIDES_API = 10;
+/** Teto de hashtags do Instagram desde dez/2025. */
+export const MAX_HASHTAGS = 5;
 export const MAX_VERSIONS = 5;

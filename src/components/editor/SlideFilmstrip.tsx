@@ -94,7 +94,7 @@ function SortableSlideThumb({
             : "border-border hover:border-muted-foreground/50"
         )}
         style={{ width: thumbWidth, height: thumbHeight }}
-        aria-label={`Select slide ${index + 1}`}
+        aria-label={`Selecionar slide ${index + 1}`}
       >
         <SlideRenderer
           html={slide.html}
@@ -114,7 +114,7 @@ function SortableSlideThumb({
               e.stopPropagation();
               onUndo();
             }}
-            aria-label="Undo last change"
+            aria-label="Desfazer última alteração"
           >
             <Undo2 className="h-2.5 w-2.5" />
           </Button>
@@ -128,7 +128,7 @@ function SortableSlideThumb({
               e.stopPropagation();
               onDelete();
             }}
-            aria-label={`Delete slide ${index + 1}`}
+            aria-label={`Excluir slide ${index + 1}`}
           >
             <Trash2 className="h-2.5 w-2.5" />
           </Button>
@@ -225,7 +225,7 @@ export function SlideFilmstrip({
           >
             <div className="flex flex-col items-center gap-1">
               <div className="w-3 h-3 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-              <span className="text-[8px] text-accent font-medium">Creating</span>
+              <span className="text-[8px] text-accent font-medium">Criando</span>
             </div>
           </div>
         )}
@@ -235,7 +235,7 @@ export function SlideFilmstrip({
             onClick={onAddSlideRequest}
             className="shrink-0 rounded-lg border-2 border-dashed border-border flex items-center justify-center hover:border-muted-foreground/50 hover:bg-muted/50 transition-colors cursor-pointer"
             style={{ width: thumbWidth, height: thumbHeight }}
-            aria-label="Add slide via AI"
+            aria-label="Adicionar slide pelo assistente"
           >
             <Plus className="h-4 w-4 text-muted-foreground" />
           </button>

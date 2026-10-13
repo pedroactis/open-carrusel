@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCarousel, updateCarousel } from "@/lib/carousels";
+import { MAX_HASHTAGS } from "@/types/carousel";
 
 export async function GET(
   _request: Request,
@@ -28,7 +29,18 @@ export async function PUT(
       hashtags?: string[];
     };
 
-    const updated = await updateCarousel(id, { caption, hashtags });
+    // O Instagram aceita no máximo 5 hashtags por post (dez/2025): recusa para o agente refazer.
+    if (hashtags && hashtags.length > MAX_HASHTAGS) {
+      return NextResponse.json(
+        { error: `Máximo de ${MAX_HASHTAGS} hashtags por post; envie de 0 a 3 específicas` },
+        { status: 400 }
+      );
+    }
+
+    const updated = await updateCarousel(id, {
+      caption,
+      hashtags: hashtags?.map((h) => h.replace(/^#/, "")),
+    });
     if (!updated) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }

@@ -9,8 +9,8 @@ interface AspectRatioSelectorProps {
 }
 
 const RATIOS: { value: AspectRatio; label: string; icon: { w: number; h: number } }[] = [
-  { value: "1:1", label: "Square", icon: { w: 16, h: 16 } },
-  { value: "4:5", label: "Portrait", icon: { w: 16, h: 20 } },
+  { value: "1:1", label: "Quadrado", icon: { w: 16, h: 16 } },
+  { value: "4:5", label: "Retrato", icon: { w: 16, h: 20 } },
   { value: "9:16", label: "Story", icon: { w: 12, h: 22 } },
 ];
 

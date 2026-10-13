@@ -20,7 +20,7 @@ export function ConfirmDialog({
   onOpenChange,
   title,
   description,
-  confirmLabel = "Confirm",
+  confirmLabel = "Confirmar",
   variant = "default",
   onConfirm,
 }: ConfirmDialogProps) {
@@ -51,7 +51,7 @@ export function ConfirmDialog({
             <Dialog.Close asChild>
               <button
                 className="h-6 w-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                aria-label="Close"
+                aria-label="Fechar"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -60,7 +60,7 @@ export function ConfirmDialog({
           <div className="flex justify-end gap-2 mt-6">
             <Dialog.Close asChild>
               <Button variant="outline" size="sm">
-                Cancel
+                Cancelar
               </Button>
             </Dialog.Close>
             <Button

@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Trash2, Grid3X3, Bookmark, Maximize2 } from "lucide-react";
+import { Trash2, Grid3X3, Bookmark, Maximize2, ClipboardCheck, BarChart3 } from "lucide-react";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -15,6 +15,7 @@ import { ExportButton } from "@/components/editor/ExportButton";
 import { CaptionPanel } from "@/components/editor/CaptionPanel";
 import { SafeZoneOverlay } from "@/components/editor/SafeZoneOverlay";
 import { FullscreenPreview } from "@/components/editor/FullscreenPreview";
+import { ResultDialog } from "@/components/editor/ResultDialog";
 import type { Carousel, AspectRatio } from "@/types/carousel";
 
 interface PageProps {
@@ -32,6 +33,7 @@ export default function CarouselEditorPage({ params }: PageProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSafeZones, setShowSafeZones] = useState(false);
   const [showFullscreen, setShowFullscreen] = useState(false);
+  const [showResult, setShowResult] = useState(false);
 
   // Confirm dialog state
   const [confirmState, setConfirmState] = useState<{
@@ -43,6 +45,8 @@ export default function CarouselEditorPage({ params }: PageProps) {
 
   // Ref for focusing chat input when + button is clicked
   const chatInputRef = useRef<HTMLTextAreaElement | null>(null);
+  // Lets the Revisar button send the review request through the chat
+  const sendMessageRef = useRef<((message: string) => void) | null>(null);
 
   const fetchCarousel = useCallback(async () => {
     try {
@@ -112,8 +116,8 @@ export default function CarouselEditorPage({ params }: PageProps) {
     const slideIndex = carousel.slides.findIndex((s) => s.id === slideId);
     setConfirmState({
       open: true,
-      title: `Delete slide ${slideIndex + 1}?`,
-      description: "This action cannot be undone.",
+      title: `Excluir o slide ${slideIndex + 1}?`,
+      description: "Essa ação não pode ser desfeita.",
       onConfirm: async () => {
         const res = await fetch(`/api/carousels/${id}/slides/${slideId}`, {
           method: "DELETE",
@@ -134,8 +138,8 @@ export default function CarouselEditorPage({ params }: PageProps) {
     if (!carousel) return;
     setConfirmState({
       open: true,
-      title: `Delete "${carousel.name}"?`,
-      description: "This will permanently delete the carousel and all its slides.",
+      title: `Excluir "${carousel.name}"?`,
+      description: "O carrossel e todos os slides serão excluídos para sempre.",
       onConfirm: async () => {
         const res = await fetch(`/api/carousels/${id}`, { method: "DELETE" });
         if (res.ok) router.push("/");
@@ -172,15 +176,25 @@ export default function CarouselEditorPage({ params }: PageProps) {
     }, 100);
   }, []);
 
+  const handleReview = useCallback(() => {
+    setChatOpen(true);
+    // The chat panel mounts on open; wait a tick so its send function is registered
+    setTimeout(() => {
+      sendMessageRef.current?.(
+        "Revisar: aplique a checklist de revisão neste carrossel, corrija o que falhar e me mostre a lista final."
+      );
+    }, 100);
+  }, []);
+
   if (notFound) {
     return (
       <div className="h-full flex flex-col items-center justify-center gap-4">
-        <p className="text-lg font-semibold">Carousel not found</p>
+        <p className="text-lg font-semibold">Carrossel não encontrado</p>
         <p className="text-sm text-muted-foreground">
-          This carousel may have been deleted.
+          Talvez este carrossel tenha sido excluído.
         </p>
         <Link href="/" className="text-sm text-accent underline">
-          Back to dashboard
+          Voltar ao início
         </Link>
       </div>
     );
@@ -223,13 +237,21 @@ export default function CarouselEditorPage({ params }: PageProps) {
         onActiveChange={setActiveSlide}
       />
 
+      <ResultDialog
+        open={showResult}
+        onOpenChange={setShowResult}
+        carouselId={carousel.id}
+        result={carousel.result}
+        onSaved={fetchCarousel}
+      />
+
       {/* Confirm dialog */}
       <ConfirmDialog
         open={confirmState.open}
         onOpenChange={(open) => setConfirmState((s) => ({ ...s, open }))}
         title={confirmState.title}
         description={confirmState.description}
-        confirmLabel="Delete"
+        confirmLabel="Excluir"
         variant="destructive"
         onConfirm={confirmState.onConfirm}
       />
@@ -246,6 +268,7 @@ export default function CarouselEditorPage({ params }: PageProps) {
               onStreamStart={handleStreamStart}
               onStreamEnd={handleStreamEnd}
               chatInputRef={chatInputRef}
+              sendMessageRef={sendMessageRef}
             />
           </div>
         )}
@@ -262,10 +285,33 @@ export default function CarouselEditorPage({ params }: PageProps) {
             <Button
               variant="ghost"
               size="sm"
+              onClick={handleReview}
+              disabled={carousel.slides.length === 0 || isGenerating || !claudeAvailable}
+              className="text-muted-foreground gap-1.5"
+              aria-label="Revisar"
+              title="O assistente confere a estrutura de conversão e corrige o que falhar"
+            >
+              <ClipboardCheck className="h-3.5 w-3.5" />
+              <span className="text-xs hidden xl:inline">Revisar</span>
+            </Button>
+            <Button
+              variant={carousel.result ? "outline" : "ghost"}
+              size="sm"
+              onClick={() => setShowResult(true)}
+              className={carousel.result ? "border-accent text-accent gap-1.5" : "text-muted-foreground gap-1.5"}
+              aria-label="Resultado"
+              title="Anotar os números do post publicado"
+            >
+              <BarChart3 className="h-3.5 w-3.5" />
+              <span className="text-xs hidden xl:inline">Resultado</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setShowFullscreen(true)}
               className="text-muted-foreground"
-              aria-label="Fullscreen preview"
-              title="Fullscreen preview"
+              aria-label="Ver em tela cheia"
+              title="Ver em tela cheia"
             >
               <Maximize2 className="h-3.5 w-3.5" />
             </Button>
@@ -274,8 +320,8 @@ export default function CarouselEditorPage({ params }: PageProps) {
               size="sm"
               onClick={() => setShowSafeZones(!showSafeZones)}
               className={showSafeZones ? "border-accent text-accent" : "text-muted-foreground"}
-              aria-label="Toggle safe zones"
-              title="Instagram safe zones"
+              aria-label="Mostrar ou ocultar áreas seguras"
+              title="Áreas seguras do Instagram"
             >
               <Grid3X3 className="h-3.5 w-3.5" />
             </Button>
@@ -290,8 +336,8 @@ export default function CarouselEditorPage({ params }: PageProps) {
                 });
               }}
               className="text-muted-foreground"
-              aria-label="Save as template"
-              title="Save as template"
+              aria-label="Salvar como modelo"
+              title="Salvar como modelo"
             >
               <Bookmark className="h-3.5 w-3.5" />
             </Button>
@@ -300,7 +346,7 @@ export default function CarouselEditorPage({ params }: PageProps) {
               size="sm"
               onClick={handleDeleteCarousel}
               className="text-muted-foreground hover:text-destructive"
-              aria-label="Delete carousel"
+              aria-label="Excluir carrossel"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </Button>
@@ -308,7 +354,7 @@ export default function CarouselEditorPage({ params }: PageProps) {
               onClick={() => setChatOpen(!chatOpen)}
               className="text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-md border border-border hover:bg-muted"
             >
-              {chatOpen ? "Hide Chat" : "Show Chat"}
+              {chatOpen ? "Ocultar chat" : "Mostrar chat"}
             </button>
             <ExportButton
               carouselId={carousel.id}
@@ -327,8 +373,10 @@ export default function CarouselEditorPage({ params }: PageProps) {
 
           {/* Caption panel */}
           <CaptionPanel
+            carouselId={carousel.id}
             caption={carousel.caption}
             hashtags={carousel.hashtags}
+            material={carousel.material}
           />
         </div>
       </div>

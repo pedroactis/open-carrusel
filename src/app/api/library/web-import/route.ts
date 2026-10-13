@@ -24,11 +24,11 @@ export async function POST(request: Request) {
       items = await searchPinterest(query, limit);
     } catch (e) {
       console.error("pinterest search", e);
-      return NextResponse.json({ error: "Pinterest search failed" }, { status: 502 });
+      return NextResponse.json({ error: "A busca no Pinterest falhou" }, { status: 502 });
     }
   }
   if (items.length === 0) {
-    return NextResponse.json({ error: "Nothing to import" }, { status: 400 });
+    return NextResponse.json({ error: "Nada para importar" }, { status: 400 });
   }
 
   const saved = [];

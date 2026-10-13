@@ -17,19 +17,19 @@ interface BrandSetupProps {
 }
 
 const STYLE_OPTIONS = [
-  "minimal",
-  "bold",
-  "playful",
-  "corporate",
-  "luxury",
+  "minimalista",
+  "ousado",
+  "divertido",
+  "corporativo",
+  "luxuoso",
   "vintage",
-  "modern",
-  "elegant",
-  "creative",
-  "professional",
+  "moderno",
+  "elegante",
+  "criativo",
+  "profissional",
 ];
 
-const STEPS = ["Brand Name", "Colors", "Fonts", "Logo", "Style"];
+const STEPS = ["Nome da marca", "Cores", "Fontes", "Logo", "Estilo"];
 
 export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) {
   const [step, setStep] = useState(0);
@@ -80,7 +80,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
         <button
           onClick={onComplete}
           className="absolute top-4 right-4 h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors z-10"
-          aria-label="Close"
+          aria-label="Fechar"
         >
           <X className="h-4 w-4" />
         </button>
@@ -92,9 +92,9 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
               <Palette className="h-5 w-5 text-accent" />
             </div>
             <div>
-              <h2 className="text-lg font-bold">Set Up Your Brand</h2>
+              <h2 className="text-lg font-bold">Configure sua marca</h2>
               <p className="text-xs text-muted-foreground">
-                Step {step + 1} of {STEPS.length}: {STEPS[step]}
+                Passo {step + 1} de {STEPS.length}: {STEPS[step]}
               </p>
             </div>
           </div>
@@ -117,21 +117,21 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium">
-                  What&apos;s your brand name?
+                  Qual é o nome da sua marca?
                 </label>
                 <Input
                   value={brand.name}
                   onChange={(e) =>
                     setBrand({ ...brand, name: e.target.value })
                   }
-                  placeholder="My Brand"
+                  placeholder="Minha marca"
                   className="mt-2 text-lg h-12"
                   autoFocus
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                This helps the AI maintain your brand identity across all
-                carousels.
+                Isso ajuda a IA a manter a identidade da sua marca em todos
+                os carrosséis.
               </p>
             </div>
           )}
@@ -139,7 +139,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
           {step === 1 && (
             <div className="space-y-3">
               <ColorPicker
-                label="Primary"
+                label="Primária"
                 value={brand.colors.primary}
                 onChange={(v) =>
                   setBrand({
@@ -149,7 +149,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
                 }
               />
               <ColorPicker
-                label="Secondary"
+                label="Secundária"
                 value={brand.colors.secondary}
                 onChange={(v) =>
                   setBrand({
@@ -159,7 +159,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
                 }
               />
               <ColorPicker
-                label="Accent"
+                label="Destaque"
                 value={brand.colors.accent}
                 onChange={(v) =>
                   setBrand({
@@ -169,7 +169,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
                 }
               />
               <ColorPicker
-                label="Background"
+                label="Fundo"
                 value={brand.colors.background}
                 onChange={(v) =>
                   setBrand({
@@ -179,7 +179,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
                 }
               />
               <ColorPicker
-                label="Surface"
+                label="Superfície"
                 value={brand.colors.surface}
                 onChange={(v) =>
                   setBrand({
@@ -194,7 +194,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
           {step === 2 && (
             <div className="space-y-4">
               <FontSelector
-                label="Heading Font"
+                label="Fonte dos títulos"
                 value={brand.fonts.heading}
                 onChange={(v) =>
                   setBrand({
@@ -204,7 +204,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
                 }
               />
               <FontSelector
-                label="Body Font"
+                label="Fonte do texto"
                 value={brand.fonts.body}
                 onChange={(v) =>
                   setBrand({
@@ -226,13 +226,14 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
           {step === 4 && (
             <div>
               <label className="text-sm font-medium">
-                Choose your brand style
+                Escolha o estilo da sua marca
               </label>
               <p className="text-xs text-muted-foreground mt-1 mb-3">
-                Select keywords that describe your visual identity
+                Selecione palavras que descrevem sua identidade visual
               </p>
               <div className="flex flex-wrap gap-2">
-                {STYLE_OPTIONS.map((keyword) => (
+                {/* Palavras salvas antes da tradução (ex.: "minimal") continuam visíveis para poder desmarcar. */}
+                {[...new Set([...STYLE_OPTIONS, ...brand.styleKeywords])].map((keyword) => (
                   <button
                     key={keyword}
                     onClick={() => {
@@ -263,7 +264,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
             disabled={step === 0}
           >
             <ChevronLeft className="h-4 w-4" />
-            Back
+            Voltar
           </Button>
 
           {step < STEPS.length - 1 ? (
@@ -271,7 +272,7 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
               onClick={() => setStep(step + 1)}
               disabled={step === 0 && !brand.name.trim()}
             >
-              Next
+              Próximo
               <ChevronRight className="h-4 w-4" />
             </Button>
           ) : (
@@ -281,11 +282,11 @@ export function BrandSetup({ open, onComplete, initialBrand }: BrandSetupProps) 
               disabled={saving || !brand.name.trim()}
             >
               {saving ? (
-                "Saving..."
+                "Salvando..."
               ) : (
                 <>
                   <Check className="h-4 w-4" />
-                  Complete Setup
+                  Concluir configuração
                 </>
               )}
             </Button>

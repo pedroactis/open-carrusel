@@ -24,7 +24,7 @@ export function TemplateCard({ template, onUse, onDelete }: TemplateCardProps) {
           />
         ) : (
           <div className="h-full flex items-center justify-center text-muted-foreground/30 text-xs">
-            Empty
+            Vazio
           </div>
         )}
       </div>
@@ -39,7 +39,7 @@ export function TemplateCard({ template, onUse, onDelete }: TemplateCardProps) {
           className="flex-1 text-xs"
           onClick={() => onUse(template.id)}
         >
-          Use Template
+          Usar modelo
           <ArrowRight className="h-3 w-3" />
         </Button>
         <Button
@@ -47,7 +47,7 @@ export function TemplateCard({ template, onUse, onDelete }: TemplateCardProps) {
           size="icon"
           className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={() => onDelete(template.id)}
-          aria-label="Delete template"
+          aria-label="Excluir modelo"
         >
           <Trash2 className="h-3 w-3" />
         </Button>
